@@ -89,3 +89,8 @@ bot.command("stato", async (ctx) => {
 bot.command("chat_id", (ctx) => {
   ctx.reply(ctx.chat.id.toString());
 });
+
+bot.command("user_id", (ctx) => {
+  // FIXME: null check
+  ctx.reply(ctx.from!.id.toString());
+});

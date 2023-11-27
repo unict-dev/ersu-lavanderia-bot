@@ -1,7 +1,6 @@
 {
   "imports": {
-    "grammy": "https://deno.land/x/grammy@v1.19.2/mod.ts",
-    "oak": "https://deno.land/x/oak@v12.6.1/mod.ts"
+    "grammy": "https://deno.land/x/grammy@v1.19.2/mod.ts"
   },
   "tasks": {
     "dev": "deno run --unstable --allow-all --watch poll.ts"

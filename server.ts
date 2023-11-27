@@ -1,12 +1,18 @@
 import { bot } from "./bot.ts";
-import { Application, Router } from "oak";
 import { webhookCallback } from "grammy";
 
-const router = new Router();
+const handleUpdate = webhookCallback(bot, "std/http");
 
-router.use("/", webhookCallback(bot, "oak"));
-
-const app = new Application();
-
-app.use(router.routes());
-app.listen();
+Deno.serve(async (req) => {
+  if (req.method === "POST") {
+    const url = new URL(req.url);
+    if (url.pathname.slice(1) === bot.token) {
+      try {
+        return await handleUpdate(req);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+  return new Response();
+});

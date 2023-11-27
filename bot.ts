@@ -13,6 +13,10 @@ if (!bot_token) throw new Error("BOT_TOKEN is unset");
 const channel_id = Deno.env.get("CHANNEL_ID");
 if (!channel_id) throw new Error("CHANNEL_ID is unset");
 
+const whitelist_env = Deno.env.get("WHITELIST");
+if (!whitelist_env) throw new Error("WHITELIST is unset");
+const whitelist = whitelist_env.split(",");
+
 // This opens a redis like database we use to store the key status.
 const kv = await Deno.openKv();
 
@@ -25,10 +29,24 @@ meaning it should contain all the information to get started with the bot
 */
 bot.command(
   "start",
-  (ctx) => ctx.reply("Bevenuto\nclicc"),
+  (ctx) => {
+    // FIXME: null check
+    if (whitelist.includes(ctx.from!.id.toString())) {
+      ctx.reply("Benvenuto admin");
+    } else {
+      ctx.reply("Benvenuto user");
+    }
+  },
 );
 
 bot.command("disponibile", async (ctx) => {
+  // FIXME: null check
+  if (!whitelist.includes(ctx.from!.id.toString())) {
+    return await ctx.reply(
+      "Questo commando è riservato agli amministratori.\nSe credi si tratti di un errore contatta il responsabile del bot.",
+    );
+  }
+
   const available = (await kv.get<boolean>(["key", "available"])).value;
 
   if (available === null || !available) {
@@ -48,6 +66,13 @@ bot.command("disponibile", async (ctx) => {
 });
 
 bot.command("occupata", async (ctx) => {
+  // FIXME: null check
+  if (!whitelist.includes(ctx.from!.id.toString())) {
+    return await ctx.reply(
+      "Questo commando è riservato agli amministratori.\nSe credi si tratti di un errore contatta il responsabile del bot.",
+    );
+  }
+
   const available = (await kv.get<boolean>(["key", "available"])).value;
 
   if (available === null || available) {

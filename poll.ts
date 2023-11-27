@@ -1,3 +1,3 @@
 import { bot } from "./bot.ts";
 
-bot.start()
+bot.start();

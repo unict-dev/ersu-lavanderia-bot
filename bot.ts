@@ -18,7 +18,7 @@ if (!admins_env) throw new Error("ADMINS is unset");
 const admins = admins_env.split(",");
 
 // This opens a redis like database we use to store the key status.
-const kv = await Deno.openKv();
+export const kv = await Deno.openKv();
 
 // Export the bot so we can easily use bot webhook and polling mode.
 export const bot = new Bot(bot_token);

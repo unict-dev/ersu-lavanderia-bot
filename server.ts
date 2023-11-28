@@ -4,7 +4,7 @@ import { Application, Router } from "oak";
 
 const router = new Router();
 router
-  .get(`/api/${bot.token}/available`, async (ctx) => {
+  .get(`/api/available`, async (ctx) => {
     const available = (await kv.get<boolean>(["key", "available"])).value;
     ctx.response.type = "application/json";
     ctx.response.body = { available };

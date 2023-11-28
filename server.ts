@@ -10,3 +10,5 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.use(webhookCallback(bot, "oak"));
+
+await app.listen();
